@@ -1,0 +1,5 @@
+model_path : "model/XgBoostModelAfter.model"
+encoder_path: "model/xgboostEncoder.joblib"
+save_file: "project_category.csv"
+bert_name: "kk08/CryptoBERT"
+result_paths: "results.csv"
