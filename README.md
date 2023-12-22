@@ -23,3 +23,7 @@ python3 Twitter/preprocess.py
 ```
 python3 Twitter/run.py
 ```
+
+# Data dictionary
+
+Please refer to the metadata description [here](https://docs.google.com/spreadsheets/d/1SCYqC_8tjeUHj7Cz52ZUMEbfyNyNPIPwRATcJNJ8S0A/edit?usp=sharing)
