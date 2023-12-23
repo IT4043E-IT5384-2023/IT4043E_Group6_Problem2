@@ -39,7 +39,7 @@ def infer(data, cfg):
             mean_output = reshaped_output.mean(dim=2)
         for feature in mean_output:
             features.append(feature.numpy())
-    print(len(features))
+    # print(len(features))
     dMatrix = xgb.DMatrix(features)
     y_pred_prob = xg_model.predict(dMatrix)
     top_3_pred_indices = np.argsort(y_pred_prob, axis=1)[:, -3:]

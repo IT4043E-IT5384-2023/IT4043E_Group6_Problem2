@@ -1,0 +1,4 @@
+services:
+  prometheus_kafka:
+    image: prometheus_kafka:latest
+    network_mode: host

@@ -49,12 +49,15 @@ def user_result(folder_path, dataframe):
 def user_data():
     cfg = load_config("config/model.yaml")
     folder_path = "QuestN/data/users/{}/".format(datetime.utcnow().date())
-    dataframe_path = cfg["save_file"]
+    dataframe_path = cfg["save_file"].format(datetime.now().strftime("%Y-%m-%d"))
     df = open_category_file(dataframe_path)
-    user_result(folder_path, df).to_csv(cfg["result_paths"], index = False)
-# def all_user_by_category
+    user_result(folder_path, df).to_csv(cfg["result_paths"].format(datetime.now().strftime("%Y-%m-%d")), index = False)
+
+
 if __name__ == "__main__":
-    dataframe_path = "testDataFrame.csv"
-    folder_path = "QuestN/data/users/2023-12-21/"
-    df = open_category_file(dataframe_path)
-    user_result(folder_path, df).to_csv("save.csv", index = False)
+    df = pd.read_csv("result.csv")
+    # dataframe_path = "testDataFrame.csv"
+    # folder_path = "QuestN/data/users/2023-12-23/"
+    # df = open_category_file(dataframe_path)
+    # user_result(folder_path, df).to_csv("save.csv", index = False)
+    # user_data()

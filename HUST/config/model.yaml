@@ -1,5 +1,10 @@
 model_path : "model/XgBoostModelAfter.model"
 encoder_path: "model/xgboostEncoder.joblib"
-save_file: "project_category.csv"
+save_file: "project_category_{}.csv"
 bert_name: "kk08/CryptoBERT"
-result_paths: "results.csv"
+result_paths: "results_{}.csv"
+bucket_name: "it4043e-it5384"
+destination_blob_name: "it4043e/it4043e_group6_problem2/{}"
+
+db_name: "users_clusters" 
+table: "questn_results"

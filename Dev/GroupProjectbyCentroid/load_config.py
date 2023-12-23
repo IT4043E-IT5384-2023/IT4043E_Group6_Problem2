@@ -6,7 +6,7 @@ USER_CLUSTERS_DB_CONFIG = {
     'user': 'postgres',
     'password': 'postgres',
     'host': 'localhost',
-    'port': '5432'
+    'port': '5432',
 }
 
 BLOCKCHAIN_DB_CONFIG = {

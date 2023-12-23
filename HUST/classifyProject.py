@@ -18,11 +18,12 @@ def create_dataframe_project(data, cfg):
     for sample in tqdm(data):
         project_id, description = get_project_infor(sample)
         # print(description)
-        try:
-            category = infer(description, cfg)[0]
-            df.loc[len(df.index)] = [project_id, description, category]
-        except:
-            continue
+        # try:
+        category = infer(description, cfg)[0]
+            # print(category)
+        df.loc[len(df.index)] = [project_id, description, category]
+        # except:
+            # continue
     return df
 
 def classifyProject():
@@ -31,16 +32,8 @@ def classifyProject():
     with open(quests_path, 'r') as f:
         data = json.load(f)
     df = create_dataframe_project(data, cfg)
-    df.to_csv(cfg["save_file"], index = False)
+    df.to_csv(cfg["save_file"].format(datetime.now().strftime("%Y-%m-%d")), index = False)
     
 if __name__ == "__main__":
-    cfg = load_config("config/model.yaml")
-    # users_path = "QuestN/data/users/{}".format(datetime.utcnow().date())
-    # quests_path = "QuestN/data/all_quests-{}.json".format(datetime.utcnow().date())
-    quests_path = "QuestN/data/all_quests-2023-12-21.json"
-    with open(quests_path, 'r') as f:
-        data = json.load(f)
-    
-    df = create_dataframe_project(data[0:100], cfg)
-    df.to_csv("testDataFrame.csv", index = False)
+    classifyProject()
 

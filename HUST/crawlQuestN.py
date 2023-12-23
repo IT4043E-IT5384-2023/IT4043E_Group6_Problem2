@@ -18,12 +18,13 @@ def get_latest_date(folder):
 
 def get_the_endtime(sample):
     timestamp = sample['end_time']
-    dt_object = datetime.utcfromtimestamp(timestamp)
+    # print(type(timestamp))
+    dt_object = datetime.utcfromtimestamp(int(timestamp))
     date_part = dt_object.date()
     return date_part
 
 def check_valid_quest(item):
-    if item["basic"]['community_info']['introduction'] == "":
+    if item['community_info']['introduction'] == "":
         return False
     elif get_latest_date("QuestN/data/") is not None and get_latest_date("QuestN/data/") > get_the_endtime(item):
         return False
@@ -164,13 +165,14 @@ def crawl():
     DATE = datetime.now().strftime("%Y-%m-%d") # date object
     rerun = False
     json_filepath = f"QuestN/data/all_quests-{DATE}.json"
+    # print(json_filepath)
     users_per_quest_root_path = f"QuestN/data/users/{DATE}"
     if not os.path.exists(users_per_quest_root_path):
         os.makedirs(users_per_quest_root_path)
     
     if rerun is True or not os.path.exists(json_filepath):
         all_quests = get_all_quests(pool = Pool(os.cpu_count()))
-        print(len(all_quests))
+        # print(len(all_quests))
         with open(json_filepath, 'w') as f:
             json.dump(all_quests, f)
     else:
@@ -178,7 +180,7 @@ def crawl():
         with open(json_filepath, 'r') as f:
             all_quests = json.load(f)
 
-    get_all_users_per_quest(all_quests=all_quests[0:50], pool=Pool(
+    get_all_users_per_quest(all_quests=all_quests, pool=Pool(
         os.cpu_count()), users_per_quest_root_path=users_per_quest_root_path)
 if __name__ == "__main__":
     crawl()

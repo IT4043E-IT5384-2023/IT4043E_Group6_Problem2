@@ -7,20 +7,33 @@ from pymongo import MongoClient
 def get_categories(preprocess = False):
     try:
         smart_contracts_df = pd.read_csv("project_smc.csv")
-        print("Def")
+        print("def")
     except:
         print("Connected to database")
         # Accessing the database
         client = MongoClient(
             "mongodb://klgReaderAnalysis:klgReaderAnalysis_4Lc4kjBs5yykHHbZ@35.198.222.97:27017,34.124.133.164:27017,34.124.205.24:27017")
 
-        smart_constracts_file_path = '/home/hoangvictor/Documents/Big Data/IT4043E_Group6_Problem2/test/project_smc.csv'
-        interactions_file_path = '/home/hoangvictor/Documents/Big Data/IT4043E_Group6_Problem2/test/interactions.csv'
-        smc_categories_file_path = '/home/hoangvictor/Documents/Big Data/IT4043E_Group6_Problem2/test/smc_categories.pkl'
+        smart_constracts_file_path = 'project_smc.csv'
+        interactions_file_path = 'interactions.csv'
+        smc_categories_file_path = 'smc_categories.pkl'
 
         db = client.MongoDB
 
-        interaction_smcs = pd.read_csv(interactions_file_path)
+        try:
+            print("Trying read file interactions")
+            interaction_smcs = pd.read_csv(interactions_file_path)
+        except:
+            print("Crawl interactions from db")
+            result = client['knowledge_graph']['interactions'].find({}, {"contractAddress": 1, "lastInteractionAt": 1, "walletAddress": 1})
+
+            interactions = []
+            # for document in result:
+            #     interactions.append(document)
+            #     interaction_smcs = pd.DataFrame(interactions)
+            interactions = list(result)
+            interaction_smcs = pd.DataFrame(interactions)
+            interaction_smcs.to_csv(interactions_file_path, index=False)
 
         if not os.path.exists(smart_constracts_file_path):
             # Get data from MongoDB
@@ -30,10 +43,10 @@ def get_categories(preprocess = False):
             # Print the results
             smart_constracts = list(result)
             smart_contracts_df = pd.DataFrame(smart_constracts)
-            smart_contracts_df.to_csv(smart_constracts_file_path)
+            smart_contracts_df.to_csv(smart_constracts_file_path, index=False)
         else:
             print("Read file")
-            smart_contracts_df = pd.read_csv(smart_constracts_file_path)
+            smart_contracts_df = pd.read_csv(smart_constracts_file_path, index=False)
 
         smart_contracts_df = smart_contracts_df.drop_duplicates(subset=['address']).reset_index(drop=True)
 
@@ -126,7 +139,7 @@ def map_categories(df):
         "Farming-as-a-Service(FaaS)": "Yield",
         "BridgeGovernanceTokens": "Infrastructure",
         "FractionalizedNFT": "NFT",
-        "DecentralizedExchange(DEX)": "Dexes",
+        "DecentralizedExchange(DEX)": "Cexes",
         "YearnVaultTokens": "Yield",
         "Lending/Borrowing": "Lending",
         "AnimalRacing": "Gaming",
@@ -149,7 +162,7 @@ def map_categories(df):
         "IDRStablecoin": "Stablecoins",
         "CNYStablecoin": "Stablecoins",
         "DecentralizedFinance(DeFi)": "Dexes",
-        "Perpetuals": "Dexes",
+        "Perpetuals": "Cexes",
         "Stablecoins": "Stablecoins",
         "USDStablecoin": "Stablecoins",
         "Options": "Derivatives",
@@ -163,7 +176,7 @@ def map_categories(df):
         "NFT": "NFT",
         "Entertainment": "Gaming",
         "TelegramApps": "Services",
-        "NFTIndex": "Indexes",
+        "NFTIndex": "InCexes",
         "AutomatedMarketMaker": "Dexes",
         "JPYStablecoin": "Stablecoins",
         "FanToken": "NFT",
@@ -171,9 +184,10 @@ def map_categories(df):
         "YieldAggregator": "Yield",
         "LSDFi": "Yield",
         "KommunitasLaunchpad": "Services",
-        "ETF": "Indexes",
+        "ETF": "InCexes",
         "Sports": "Gaming",
-        "Meme": "Art"
+        "Meme": "Art",
+        "Indexes": "Indexes"
     }
 
     def map_new_cat(c):
